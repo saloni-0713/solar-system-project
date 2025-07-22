@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Solar System</title>
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+
+   body {
+      margin: 0;
+      overflow: hidden;
+      background: black;
+      font-family: sans-serif;
+   }
+
+    #speedPanel {
+      position: fixed;
+      top: 10px;
+      left: 10px;
+      background: rgba(255,255,255,0.8);
+      padding: 10px;
+      border-radius: 8px;
+      max-height: 90vh;
+      overflow-y: auto;
+      z-index: 10;
+    }
+    .slider {
+      width: 120px;
+      display: block;
+      margin-bottom: 10px;
+    }
+    label {
+      font-size: 14px;
+    }
+    #pauseBtn {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      padding: 10px 20px;
+      background: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 14px;
+      cursor: pointer;
+      z-index: 10;
+      box-shadow: 0 0 5px #0003;
+    }
+    body.paused * {
+      animation-play-state: paused !important;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="speedPanel">
+    <label>Mercury Speed: <input type="range" min="0.1" max="5" step="0.2" value="1" id="speed-mercury" class="slider" /></label>
+    <label>Venus Speed: <input type="range" min="0.1" max="5" step="0.1" value="1" id="speed-venus" class="slider" /></label>
+    <label>Earth Speed: <input type="range" min="0.1" max="5" step="0.1" value="1" id="speed-earth" class="slider" /></label>
+    <label>Mars Speed: <input type="range" min="0.1" max="5" step="0.1" value="1" id="speed-mars" class="slider" /></label>
+    <label>Jupiter Speed: <input type="range" min="0.1" max="5" step="0.1" value="1" id="speed-jupiter" class="slider" /></label>
+    <label>Saturn Speed: <input type="range" min="0.1" max="5" step="0.1" value="1" id="speed-saturn" class="slider" /></label>
+    <label>Uranus Speed: <input type="range" min="0.1" max="5" step="0.1" value="1" id="speed-uranus" class="slider" /></label>
+    <label>Neptune Speed: <input type="range" min="0.1" max="5" step="0.1" value="1" id="speed-neptune" class="slider" /></label>
+  </div>
+
+  <button id="pauseBtn">Pause</button>
+
+  <div class="container">
+    <div class="sun"><img src="./images/sun.png" alt="sun"></div>
+    <div class="mercury"></div>
+    <div class="venus"></div>
+    <div class="earth"><div class="moon"></div></div>
+    <div class="mars"></div>
+    <div class="jupiter"></div>
+    <div class="saturn"></div>
+    <div class="uranus"></div>
+    <div class="neptune"></div>
+    <div class="pluto"></div>
+  </div>
+
+  <!-- Optional: Canvas if you switch to 3D -->
+  <canvas id="solarCanvas" style="display:none;"></canvas>
+
+  <!-- Scripts -->
+  <script>
+    // Pause / Resume Button
+    const pauseBtn = document.getElementById('pauseBtn');
+    let isPaused = false;
+
+    pauseBtn.addEventListener('click', () => {
+      isPaused = !isPaused;
+      document.body.classList.toggle('paused');
+      pauseBtn.textContent = isPaused ? 'Resume' : 'Pause';
+    });
+
+    // Speed sliders (CSS-based only affects animation-duration, NOT JS planets)
+    const planets = [
+      'mercury', 'venus', 'earth', 'mars',
+      'jupiter', 'saturn', 'uranus', 'neptune'
+    ];
+
+    planets.forEach(planet => {
+      const slider = document.getElementById(`speed-${planet}`);
+      slider.addEventListener('input', () => {
+        const orbitElement = document.querySelector(`.${planet}`);
+        if (orbitElement) {
+          const duration = 50 / parseFloat(slider.value); // inverse speed
+          orbitElement.style.animationDuration = `${duration}s`;
+        }
+      });
+    });
+  </script>
+
+</body>
+
+<script>
+function createStars() {
+  const container = document.body;
+  for (let i = 0; i < 500; i++) {
+    const star = document.createElement("div");
+    star.className = "star";
+    star.style.width = "2px";
+    star.style.height = "2px";
+    star.style.top = Math.random() * window.innerHeight + "px";
+    star.style.left = Math.random() * window.innerWidth + "px";
+    star.style.position = "absolute";
+    star.style.background = "white";
+    star.style.borderRadius = "50%";
+    star.style.opacity = Math.random();
+    container.appendChild(star);
+  }
+}
+createStars();
+</script>
+
+</html>
